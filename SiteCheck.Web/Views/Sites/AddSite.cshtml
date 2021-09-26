@@ -1,0 +1,19 @@
+﻿@model CreateSiteDto
+@{
+    Layout = "_AuthLayout";
+}
+
+<div class="outer" style="height:100%; width: 100%;">
+    <div class="content shadow-lg">
+        <div class="from">
+            <form method="post" asp-action="AddSite" asp-controller="Sites">
+                <input asp-for="UserName" type="hidden"/>
+                <input asp-for="SiteLink" type="text" class="form-control" placeholder="Сайт">
+                <input asp-for="SecondCount" type="text" class="form-control" placeholder="Секунды">
+                <div class="btn-wrapper">
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

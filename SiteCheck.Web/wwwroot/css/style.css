@@ -1,0 +1,32 @@
+﻿body {
+    margin: auto 0;
+    height: 100%;
+}
+
+.title {
+    margin-bottom: 120px;
+    margin-top: 50px;
+}
+
+.warn {
+    text-align: center;
+    font-size: 24px;
+}
+
+.discr {
+    padding: 30px 25px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.discription {
+    margin-bottom: 110px;
+}
+
+.link {
+    font-size: 20px;
+}
+
+.question {
+    margin-bottom: 40px;
+}

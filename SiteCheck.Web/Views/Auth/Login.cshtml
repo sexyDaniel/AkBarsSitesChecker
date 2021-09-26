@@ -1,0 +1,19 @@
+﻿@model LoginViewModel
+@{
+    Layout = "_AuthLayout";
+}
+
+<div class="outer" style="height:100%; width: 100%;">
+    <div class="content shadow-lg">
+        <div class="from">
+            <h2 class="text-center">Аутентификация</h2>
+            <form method="post" asp-action="Login" asp-controller="Auth">
+                <input asp-for="UserName" type="text" class="form-control" placeholder="Логин">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Пароль">
+                <div class="btn-wrapper">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

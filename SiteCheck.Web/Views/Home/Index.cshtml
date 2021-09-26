@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "_Layout";
+ }
+
+<div>
+    <h2 class="title text-center">
+        Система для отслеживания доступности удаленных хостов
+    </h2>
+    <div class="discription">
+        <h4 class="question">
+            Что можно?
+        </h4>
+        <div class="row">
+            <div class="col-4">
+                <div class="shadow discr">
+                    <span>
+                        Вы можете добавить адрес и частоту проверки доступности
+                    </span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="shadow discr">
+                    <span>
+                        Получить историю проверок за заданный промежуток времени
+                    </span>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <div class="shadow discr">
+                    <span>
+                        Просматривать текущее состояние роботоспособности проверямых адресов
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="warn">
+            Для использования функционала системы 
+            <span>
+                <a class=" link btn btn-primary" asp-action="Login" asp-controller="Auth">Войдите</a>
+            </span> 
+            или 
+            <span>
+                <a class="link btn btn-warning" asp-action="Register" asp-controller="Auth">Зарегестрируйтесь</a>
+            </span>
+        </div>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script>
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/ReloadInfo")
+        .build();
+
+
+    hubConnection.on("Reload", function (data) {
+
+        console.log(data)
+
+    });
+
+    hubConnection.start().then(() => {
+        hubConnection.invoke("Reload", 'User').catch(function (err) {
+            return console.error(err.toString());
+        });
+    })
+</script>

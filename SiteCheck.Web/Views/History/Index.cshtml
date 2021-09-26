@@ -1,0 +1,52 @@
+﻿@model HistoryViewModel
+@{
+    Layout = "_Layout";
+}
+<div class="wrapper">
+    <div class="content">
+        <h1>
+            История
+        </h1>
+        <h4 style="color: #6053ff">
+            Сайт: @Model.SiteLink
+        </h4>
+        <div class="row">
+            <div class="col-2 user">
+                <a asp-action="Index" asp-controller="Sites">На главную</a>
+            </div>
+            <div class="col-2 ">
+            </div>
+            <div class="col-8">
+                <form method="post" asp-action="Filter" asp-controller="History" class="input-group mb-3">
+                    <input type="hidden" asp-for="SiteId" />
+                    <input type="hidden" asp-for="SiteLink" />
+                    <input type="datetime-local" asp-for="StartDate" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <input type="datetime-local" asp-for="EndDate" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Применить</button>
+                </form>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <th>#</th>
+            <th>Время</th>
+            <th>Доступность</th>
+            <tbody>
+                @for (var i = 0; i < Model.History.Count; i++)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@Model.History[i].Date.ToString("G")</td>
+                        @if (Model.History[i].IsAvaliable)
+                        {
+                            <td>Да</td>
+                        }
+                        else
+                        {
+                            <td>Нет</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
