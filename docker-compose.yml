@@ -1,0 +1,21 @@
+services:
+  sitecheck.web:
+    container_name: sitecheck.web
+    image: ${DOCKER_REGISTRY-}sitecheckweb
+    networks:
+     - sitecheck.network
+    build:
+      context: .
+      dockerfile: SiteCheck.Web/Dockerfile
+    depends_on:
+      - sitecheck.db
+
+  sitecheck.db:
+    container_name: sitecheck.db
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    networks:
+      - sitecheck.network
+
+networks:
+  sitecheck.network:
+    driver: bridge

@@ -2,10 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SiteCheck.Application.Interfaces;
 using SiteCheck.Domain;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +15,7 @@ namespace SiteCheck.Application.Users.Commands.AuthUser
         public RegisterUserRequestHandler(IDbContext context) => this.context = context;
         public async Task<bool> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName, cancellationToken);
             if (user != null) 
             {
                 return false;

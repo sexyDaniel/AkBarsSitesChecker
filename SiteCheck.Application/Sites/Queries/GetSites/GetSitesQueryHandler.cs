@@ -12,16 +12,27 @@ namespace SiteCheck.Application.Sites.Queries.GetSites
     public class GetSitesQueryHandler:IRequestHandler<GetSitesQuery,SitesVm>
     {
         private readonly IDbContext context;
-        private readonly IMapper mapper;
 
-        public GetSitesQueryHandler(IDbContext context, IMapper mapper) => 
-            (this.context,this.mapper) = (context,mapper);
+        public GetSitesQueryHandler(IDbContext context) => 
+            (this.context) = (context);
 
         public async Task<SitesVm> Handle(GetSitesQuery request, CancellationToken cancellationToken)
         {
-            var user = context.Users.FirstOrDefault(u => u.UserName == request.UserName);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+
+            if (user is null)
+            {
+                return new SitesVm { Sites = [] };
+            }
+
             var sites = await context.Sites.Where(s => s.UserId == user.Id)
-                .ProjectTo<SiteDto>(mapper.ConfigurationProvider)
+                .Select(x => new SiteDto()
+                {
+                    Id = x.Id,
+                    IsAvailable = x.IsAvailable,
+                    SecondCount = x.SecondCount,
+                    SiteLink = x.SiteLink,
+                })
                 .ToListAsync();
 
             return new SitesVm { Sites= sites };

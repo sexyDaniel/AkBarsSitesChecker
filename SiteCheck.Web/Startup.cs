@@ -35,7 +35,7 @@ namespace SiteCheck.Web
             services.AddApplication();
             services.AddHttpClient();
             services.AddSignalR();
-            //services.AddHostedService<CheckSitesBackgroundService>();
+            services.AddHostedService<CheckSitesBackgroundService>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options=> 

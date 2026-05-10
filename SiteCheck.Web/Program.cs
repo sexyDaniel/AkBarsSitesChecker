@@ -26,7 +26,7 @@ namespace SiteCheck.Web
                     var context = serviceProvider.GetRequiredService<AppDbContext>();
                     DbInitializer.Initialize(context);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                 }
             }

@@ -3,10 +3,6 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SiteCheck.Application.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SiteCheck.Application.Histories.Queries.GetHistory
 {
@@ -22,7 +18,7 @@ namespace SiteCheck.Application.Histories.Queries.GetHistory
         {
             var history = await context.Histories.Where(h => h.SiteId == request.SiteId)
                 .ProjectTo<HistoryDto>(mapper.ConfigurationProvider)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
 
             return history;
         }

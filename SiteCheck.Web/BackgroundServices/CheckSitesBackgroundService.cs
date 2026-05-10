@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace SiteCheck.Web.BackgroundServices
         private List<Timer> timers = new List<Timer>();
         private List<Site> unique = new List<Site>();
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly Ping _ping = new();
         public IServiceProvider Services { get; }
 
         public CheckSitesBackgroundService( IHttpClientFactory httpClientFactory, IServiceProvider services) =>(this.httpClientFactory,Services) = (httpClientFactory,services);
@@ -47,7 +49,7 @@ namespace SiteCheck.Web.BackgroundServices
             timers.Add(new Timer(CheckNewSites, null, 0, 2000));
             foreach (var s in sites) 
             {
-                timers.Add(new Timer(HistoryFormation, s, 0,s.SecondCount * 2000));
+                timers.Add(new Timer(HistoryFormation, s, 0,s.SecondCount * 1000));
             }
             return Task.CompletedTask;
         }
@@ -92,21 +94,21 @@ namespace SiteCheck.Web.BackgroundServices
             var site = state as Site;
             if (site != null)
             {
-                var client = httpClientFactory.CreateClient();
-                var responce = await client.GetAsync($"https://{site.SiteLink}");
                 using (var scope = Services.CreateScope())
                 {
                     var serviceProvider = scope.ServiceProvider;
                     try
                     {
+                        var pingRes = await _ping.SendPingAsync($"{site.SiteLink}");
+
                         var context = serviceProvider.GetRequiredService<AppDbContext>();
                         context.Histories.Add(new History
                         {
                             SiteId = site.Id,
                             Date = DateTime.Now,
-                            IsAvailable = responce.StatusCode == System.Net.HttpStatusCode.OK
+                            IsAvailable = pingRes.Status is IPStatus.Success
                         });
-                        site.IsAvailable = responce.StatusCode == System.Net.HttpStatusCode.OK;
+                        site.IsAvailable = pingRes.Status is IPStatus.Success;
                         context.Update(site);
                         await context.SaveChangesAsync();
                         Console.WriteLine($"Check site : {site.SiteLink}");
