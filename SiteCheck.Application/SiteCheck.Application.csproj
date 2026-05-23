@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SiteCheck.Domain\SiteCheck.Domain.csproj" />
+    <ProjectReference Include="..\SiteCheck.OpenTelemetry\SiteCheck.OpenTelemetry.csproj" />
   </ItemGroup>
 
 </Project>

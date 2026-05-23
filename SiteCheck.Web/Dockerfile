@@ -15,6 +15,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["SiteCheck.Web/SiteCheck.Web.csproj", "SiteCheck.Web/"]
 COPY ["SiteCheck.Application/SiteCheck.Application.csproj", "SiteCheck.Application/"]
+COPY ["SiteCheck.Application/SiteCheck.OpenTelemetry.csproj", "SiteCheck.OpenTelemetry/"]
 COPY ["SiteCheck.Domain/SiteCheck.Domain.csproj", "SiteCheck.Domain/"]
 COPY ["SiteCheck.Persistence/SiteCheck.Persistence.csproj", "SiteCheck.Persistence/"]
 RUN dotnet restore "./SiteCheck.Web/SiteCheck.Web.csproj"

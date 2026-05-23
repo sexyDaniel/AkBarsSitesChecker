@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SiteCheck.Application.Interfaces;
 using SiteCheck.Domain;
+using SiteCheck.OpenTelemetry.Metrics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,8 @@ namespace SiteCheck.Application.Users.Commands.AuthUser
             });
 
             await context.SaveChangesAsync(cancellationToken);
+
+            RegistrationMetric.RegistrationCounter.Add(1);
 
             return true;
         }

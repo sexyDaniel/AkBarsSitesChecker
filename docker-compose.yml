@@ -1,4 +1,30 @@
+name: sitecheck-compose
+
 services:
+  sitecheck.prometeus:
+    container_name: sitecheck.prometeus
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-otlp-receiver
+    networks:
+      - sitecheck.network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-volume:/prometheus/
+    depends_on:
+      - sitecheck.web
+  
+  sitecheck.grafana:
+    container_name: sitecheck.grafana
+    image: grafana/grafana
+    networks:
+      - sitecheck.network
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - sitecheck.prometeus
+
   sitecheck.web:
     container_name: sitecheck.web
     image: ${DOCKER_REGISTRY-}sitecheckweb
@@ -15,7 +41,14 @@ services:
     image: mcr.microsoft.com/mssql/server:2025-latest
     networks:
       - sitecheck.network
+    volumes:
+      - mssql-volume:/var/opt/mssql
 
 networks:
   sitecheck.network:
     driver: bridge
+
+volumes:
+  mssql-volume:
+  prometheus-volume:
+  grafana-storage:

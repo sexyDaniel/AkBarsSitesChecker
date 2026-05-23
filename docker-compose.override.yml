@@ -1,10 +1,15 @@
 services:
+  sitecheck.grafana:
+    ports:
+      - "3000:3000"
+
   sitecheck.web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__DefaultConnection=Server=sitecheck.db,1433;Database=AkBarsDb;User=sa;Password=;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=sitecheck.db,1433;Database=AkBarsDb;User=sa;Password=ewdeqwdqwerdw!!!ASDF;TrustServerCertificate=True
+      - Prometheus__Url=http://sitecheck.prometeus:9090/api/v1/otlp/v1/metrics
     ports:
       - "8080"
       - "8081"
@@ -13,10 +18,11 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   sitecheck.db:
     environment:
-      - sa_password=
-      - MSSQL_SA_PASSWORD=
+      - sa_password=ewdeqwdqwerdw!!!ASDF
+      - MSSQL_SA_PASSWORD=ewdeqwdqwerdw!!!ASDF
       - ACCEPT_EULA=Y
     ports:
       - "1443:1433"

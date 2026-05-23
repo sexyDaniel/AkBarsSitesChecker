@@ -28,6 +28,7 @@ namespace SiteCheck.Web
                 }
                 catch (Exception)
                 {
+                   
                 }
             }
 

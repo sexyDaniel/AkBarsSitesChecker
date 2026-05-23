@@ -1,16 +1,21 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using SiteCheck.Application;
-using SiteCheck.Persistence;
 using SiteCheck.Application.Common.Mapping;
 using SiteCheck.Application.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using SiteCheck.OpenTelemetry.Metrics.Constants;
+using SiteCheck.Persistence;
 using SiteCheck.Web.BackgroundServices;
 using SiteCheck.Web.Hubs;
+using System.Reflection;
 
 namespace SiteCheck.Web
 {
@@ -25,6 +30,20 @@ namespace SiteCheck.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOpenTelemetry()
+                .ConfigureResource(x => x.AddService("Site.Checker"))
+                .WithMetrics(x =>
+                {
+                    x.AddAspNetCoreInstrumentation();
+                    x.AddMeter(MeterNames.RegistrationMeter);
+                    x.AddOtlpExporter((exporterOptions, readerOpteons) =>
+                    {
+                        exporterOptions.Endpoint = new System.Uri(Configuration.GetSection("Prometheus:Url").Value);
+                        exporterOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
+                        readerOpteons.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 3000;
+                    });
+                });
+
             services.AddAutoMapper(conf=> 
             {
                 conf.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
