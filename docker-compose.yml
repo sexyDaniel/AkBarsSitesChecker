@@ -1,7 +1,6 @@
 name: sitecheck-compose
-
 services:
-  sitecheck.prometeus:
+  sitecheck.prometheus:
     container_name: sitecheck.prometeus
     image: prom/prometheus:latest
     command:
@@ -23,7 +22,7 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     depends_on:
-      - sitecheck.prometeus
+      - sitecheck.prometheus
 
   sitecheck.web:
     container_name: sitecheck.web
