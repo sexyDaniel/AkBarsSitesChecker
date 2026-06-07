@@ -3,7 +3,7 @@
 
 name: .NET
 
-on:
+on:  
   push:
     branches: [ "master" ]
   pull_request:
@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 10.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore SiteCheck.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build SiteCheck.sln --no-restore
     - name: Test
       run: dotnet test SiteCheck.sln --no-build --verbosity normal
